@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  cursor: none;
+}
+
+body {
+  background-color: black;
+  overflow-x: hidden;
+}
+
+.hero-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95vw; /* Ocupa quase a largura toda no mobile */
+  max-width: 900px; /* Limita no desktop para não ficar gigante */
+  aspect-ratio: 1 / 1; /* Mantém um quadrado perfeito para a composição */
+  pointer-events: none;
+}
+
+/* ESCUDO - POSIÇÃO INICIAL DEFINIDA NO CSS */
+.shield {
+  position: absolute;
+  bottom: 0%;
+  left: 50%;
+  width: 35%; /* ou o tamanho que você preferir */
+  z-index: 1000;
+  pointer-events: none;
+  will-change: transform, top, bottom, scale;
+}
+
+.player {
+  position: absolute;
+  width: 35%;
+  filter: drop-shadow(0 0 20px white)
+    drop-shadow(0 0 40px rgba(255, 255, 255, 0.3));
+  will-change: transform;
+}
+
+.yuri {
+  top: 14%;
+  left: 47%;
+  width: 40%;
+}
+.depay {
+  bottom: 33%;
+  right: 15%;
+}
+.hugo {
+  bottom: 33%;
+  left: 15%;
+}
+
+.banner {
+  padding: clamp(8px, 1.2vw, 16px) clamp(20px, 3vw, 45px);
+  background: black;
+  color: white;
+  font-weight: 900;
+  letter-spacing: 0.2vw;
+  text-transform: uppercase;
+  border: clamp(1px, 0.15vw, 3px) solid white;
+  font-size: clamp(10px, 1.3vw, 16px);
+  white-space: nowrap;
+  z-index: 100;
+  box-shadow: 0.5vw 0.5vw 0px rgba(255,255,255,0.1);
+  transition: background 0.3s;
+}
+
+.banner:hover {
+  background: white;
+  color: black;
+}
