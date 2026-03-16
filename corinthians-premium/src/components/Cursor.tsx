@@ -100,12 +100,12 @@ const Cursor = () => {
 
   return (
     <>
-      <div className="cursor-dot fixed w-2 h-2 bg-white rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2" />
+      <div className="cursor-dot fixed w-2 h-2 bg-white rounded-full pointer-events-none z-9999 -translate-x-1/2 -translate-y-1/2" />
 
       <img
         src="/cursor.png"
         alt="Cursor Corinthians"
-        className="cursor-logo fixed w-10 pointer-events-none z-[9998] -translate-x-1/2"
+        className="cursor-logo fixed w-10 pointer-events-none z-9998 -translate-x-1/2"
       />
     </>
   );

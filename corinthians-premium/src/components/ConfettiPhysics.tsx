@@ -139,7 +139,7 @@ const ConfettiPhysics: React.FC = () => {
   return (
     <canvas 
       ref={canvasRef} 
-      className="confetti-canvas fixed inset-0 pointer-events-none z-[45] opacity-0" 
+      className="confetti-canvas fixed inset-0 pointer-events-none z-45 opacity-0" 
       style={{ mixBlendMode: 'screen' }} 
     />
   );

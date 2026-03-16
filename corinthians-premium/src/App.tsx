@@ -97,7 +97,7 @@ function App() {
 
       {/* --- CAMADA DIVINA (UI FIXA) --- */}
       {/* z-[999] garante que nada, nem o rect do SVG, cubra esses elementos */}
-      <div className="fixed inset-0 pointer-events-none z-[999]">
+      <div className="fixed inset-0 pointer-events-none z-999">
         {/* Escudo/Logo */}
           <div className="hero-stage">
           <img src="/logo.png" className="shield" alt="Logo" />

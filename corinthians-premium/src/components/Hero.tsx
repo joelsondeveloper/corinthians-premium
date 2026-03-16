@@ -114,14 +114,14 @@ interface HeroProps {
   setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Hero = ({ setShowMenuBtn, setIsMenuOpen }: HeroProps) => {
-  const initialPositions = [
-    { top: "10%", left: "7%" },
-    { top: "17%", left: "70%" },
-    { top: "65%", left: "15%" },
-    { top: "75%", left: "75%" },
-  ];
+const initialPositions = [
+  { top: "10%", left: "7%" },
+  { top: "17%", left: "70%" },
+  { top: "65%", left: "15%" },
+  { top: "75%", left: "75%" },
+];
 
+const Hero = ({ setShowMenuBtn, setIsMenuOpen }: HeroProps) => {
   useEffect(() => {
     // Pegamos os elementos que estão no App.jsx via classe
     const banners = gsap.utils.toArray<HTMLElement>(".banner");
@@ -235,8 +235,12 @@ const Hero = ({ setShowMenuBtn, setIsMenuOpen }: HeroProps) => {
     });
 
     window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
-  }, []);
+    return () => {
+      window.removeEventListener("mousemove", handleMove);
+      tl.kill();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, [setIsMenuOpen, setShowMenuBtn]);
 
   return (
     <section className="hero h-[180vh] w-full relative bg-black font-sans">
