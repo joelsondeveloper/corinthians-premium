@@ -1,6 +1,13 @@
 import React from "react";
 
-const DecorationHand = ({ index, text, xPos, scale }) => {
+interface DecorationHandProps {
+    index: number;
+    text: string;
+    xPos: string;
+    scale: number;
+}
+
+const DecorationHand = ({ index, text, xPos, scale } : DecorationHandProps) => {
   return (
     <div
       className="decoration-hand-wrapper absolute bottom-0 pointer-events-none select-none"

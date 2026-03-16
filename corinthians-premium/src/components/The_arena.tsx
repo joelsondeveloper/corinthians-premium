@@ -66,7 +66,7 @@ const The_arena = () => {
         .to(".confetti-canvas", { opacity: 0, duration: 0.2 }, 0.7);
 
       // 2. LÓGICA DE MOUSE (Controla apenas o BALANÇO LATERAL / x e rotation)
-      const handleMouseMove = (e) => {
+      const handleMouseMove = (e : MouseEvent) => {
         const { clientX } = e;
         const centerX = window.innerWidth / 2;
         const mouseXPercent = (clientX - centerX) / centerX; // -1 a 1
@@ -74,7 +74,7 @@ const The_arena = () => {
         // Movemos o INNER (Filho) para não conflitar com o Wrapper
         gsap.to(".stat-hand-inner, .decoration-hand-inner", {
           x: (i) => mouseXPercent * (15 + i * 2), // Cada mão move um pouco diferente
-          rotation: (i) => mouseXPercent * -10,   // Balanço de repulsão
+          rotation: () => mouseXPercent * -10,   // Balanço de repulsão
           duration: 0.8,
           ease: "power2.out",
           overwrite: "auto" // Garante que um movimento de mouse anule o anterior suavemente

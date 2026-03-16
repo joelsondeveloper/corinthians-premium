@@ -5,6 +5,12 @@ import Lenis from "@studio-freight/lenis";
 import { useEffect, useState, useRef } from "react";
 import gsap from "gsap";
 
+declare global {
+  interface Window {
+    lenis: Lenis
+  }
+}
+
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -24,7 +30,7 @@ function App() {
     });
     window.lenis = lenis;
 
-    function raf(time) {
+    function raf(time: number = 0) {
       lenis.raf(time);
       requestAnimationFrame(raf);
     }
@@ -43,7 +49,7 @@ function App() {
     };
 
     setTimeout(() => {
-      if (savedScrollPos && parseInt(savedScrollPos) > 0) {
+      if (savedScrollPos && Number(savedScrollPos) > 0) {
         // Scroll suave de volta
         lenis.scrollTo(parseInt(savedScrollPos), {
           immediate: false,
@@ -57,7 +63,7 @@ function App() {
 
     // 5. Salva a posição antes de sair/recarregar
     const handleUnload = () => {
-      sessionStorage.setItem("scrollPos", window.scrollY);
+      sessionStorage.setItem("scrollPos", window.scrollY.toString());
       window.scrollTo(0, 0); // Garante que se ele der F5, o browser não tente pular pro meio
     };
 
@@ -131,7 +137,7 @@ function App() {
             { text: "GLORY MOMENTS", id: "#glory" },
             { text: "THE IDOLS", id: "#idols" },
             { text: "THE NATION", id: "#nation" },
-          ].map((item, i) => (
+          ].map((item) => (
             <a
               key={item.text}
               className="banner fixed cursor-pointer pointer-events-auto"

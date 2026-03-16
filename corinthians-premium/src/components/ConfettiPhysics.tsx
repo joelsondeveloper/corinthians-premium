@@ -35,7 +35,7 @@ class Particle {
     this.color = Math.random() > 0.5 ? "#FF5E00" : "#FFFFFF";
   }
 
-  update(w: number, h: number, mouseX: number, mouseY: number, time: number) {
+  update(w: number, h: number, mouseX: number, mouseY: number) {
     this.x += this.vx + Math.sin(this.rotation) * 0.1;
     this.y += this.vy;
     this.rotation += this.rVel;
