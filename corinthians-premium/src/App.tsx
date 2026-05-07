@@ -4,10 +4,11 @@ import The_arena from "./components/The_arena";
 import Lenis from "@studio-freight/lenis";
 import { useEffect, useState, useRef } from "react";
 import gsap from "gsap";
+import GloryMoments from "./components/GloryMoments";
 
 declare global {
   interface Window {
-    lenis: Lenis
+    lenis: Lenis;
   }
 }
 
@@ -45,7 +46,7 @@ function App() {
     // Definimos a função de refresh para poder remover depois
     const handleResize = () => {
       ScrollTrigger.refresh();
-      handleUnload()
+      handleUnload();
     };
 
     setTimeout(() => {
@@ -97,17 +98,18 @@ function App() {
 
       {/* --- CAMADA DIVINA (UI FIXA) --- */}
       {/* z-[999] garante que nada, nem o rect do SVG, cubra esses elementos */}
-      <div className="fixed inset-0 pointer-events-none z-999">
+      <img src="/logo.png" className="shield fixed pointer-events-none" alt="Logo" />
+      <div className="fixed inset-0 pointer-events-none z-999 bg-red">
         {/* Escudo/Logo */}
-          <div className="hero-stage">
-          <img src="/logo.png" className="shield" alt="Logo" />
-          
+        <div className="hero-stage">
           <img src="/yuri_alberto.png" className="player yuri" alt="Yuri" />
-          <img src="/memphis_depay.png" className="player depay" alt="Memphis" />
+          <img
+            src="/memphis_depay.png"
+            className="player depay"
+            alt="Memphis"
+          />
           <img src="/hugo_souza.png" className="player hugo" alt="Hugo" />
         </div>
-
-        
 
         <button
           ref={menuBtnRef}
@@ -156,8 +158,11 @@ function App() {
       <div className="sticky top-0">
         <Hero setShowMenuBtn={setShowMenu} setIsMenuOpen={setIsMenuOpen} />
       </div>
-      <div id="arena">
+      <div>
         <The_arena />
+      </div>
+      <div>
+        <GloryMoments />
       </div>
     </main>
   );

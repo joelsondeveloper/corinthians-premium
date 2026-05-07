@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- SHADER DE FUMAÇA ---
+// --- SHADER DE FUMAÇA (MANTIDO) ---
 const SmokeShader = {
   uniforms: {
     tDiffuse: { value: null },
@@ -93,7 +93,6 @@ const BackgroundCanvas = () => {
       0.1;
     if (meshRef.current) {
       const material = meshRef.current.material as THREE.ShaderMaterial;
-
       material.uniforms.uMouse.value.set(targetX, targetY);
       material.uniforms.uVelo.value = velocity.current * 5.0;
       material.uniforms.uTime.value = state.clock.getElapsedTime();
@@ -114,99 +113,121 @@ interface HeroProps {
   setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const initialPositions = [
-  { top: "10%", left: "7%" },
-  { top: "17%", left: "70%" },
-  { top: "65%", left: "15%" },
-  { top: "75%", left: "75%" },
-];
-
 const Hero = ({ setShowMenuBtn, setIsMenuOpen }: HeroProps) => {
   useEffect(() => {
-    // Pegamos os elementos que estão no App.jsx via classe
+    const mm = gsap.matchMedia();
     const banners = gsap.utils.toArray<HTMLElement>(".banner");
     const players = gsap.utils.toArray<HTMLElement>(".player");
     const shield = document.querySelector(".shield");
 
-    banners.forEach((banner, i) => {
-      gsap.set(banner, { ...initialPositions[i], x: 0, y: 0 });
-    });
-
-    gsap.set([shield, ".yuri"], { xPercent: -50 });
-
-    // Para os outros jogadores que não estão no centro, garantimos xPercent: 0
-    gsap.set([".depay", ".hugo"], { xPercent: 0 });
-
-    // 2. TIMELINE DE SCROLL
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".hero",
-        start: "top top",
-        end: "bottom top",
-        scrub: 1,
-        invalidateOnRefresh: true,
-        onLeave: () => {
-          // Quando sai da Hero para baixo
-          setShowMenuBtn(true);
-          setIsMenuOpen(true); // Começa fechado no header
-        },
-        onEnterBack: () => {
-          // Quando volta para a Hero vindo de baixo
-          setShowMenuBtn(false);
-          setIsMenuOpen(true); // Abre o menu para os links reaparecerem e animarem de volta
-          gsap.to(".banner", { opacity: 1, x: 0, duration: 0.3 }); // Garante visibilidade
-        },
-      },
-    });
-
-    // Anima o Escudo
-    tl.to(
-      shield,
+    // matchMedia permite configurar animações específicas por tamanho de tela
+    mm.add(
       {
-        bottom: "auto",
-        top: "-15vh",
-        scale: 0.3,
-        duration: 1,
-        ease: "power2.inOut",
+        isDesktop: "(min-width: 768px)",
+        isMobile: "(max-width: 767px)",
       },
-      0,
-    );
+      (context) => {
+        const { isMobile } = context.conditions as { isMobile: boolean };
 
-    // Anima a Malha
-    tl.to(
-      "#displacementMap",
-      {
-        attr: { scale: 0 },
-        duration: 1,
-        ease: "none",
+        // 1. POSIÇÕES INICIAIS ADAPTATIVAS
+        const positions = isMobile
+          ? [
+              { top: "10%", left: "7%" }, // Arena
+              { top: "17%", left: "60%" }, // Glory (Ajustado para não cortar)
+              { top: "65%", left: "15%" }, // Idols
+              { top: "75%", left: "65%" }, // Nation
+            ]
+          : [
+              { top: "10%", left: "7%" },
+              { top: "17%", left: "70%" },
+              { top: "65%", left: "15%" },
+              { top: "75%", left: "75%" },
+            ];
+
+        banners.forEach((banner, i) => {
+          gsap.set(banner, {
+            ...positions[i],
+            x: 0,
+            y: 0,
+            xPercent: isMobile && positions[i].left === "50%" ? -50 : 0, // Centraliza se estiver no meio
+          });
+        });
+
+        gsap.set(shield, {
+          left: "50%",
+          xPercent: -50,
+          bottom: isMobile ? "-15vh" : "-20vh", // Começa na base da tela
+          top: "auto",
+          scale: isMobile ? .6 : .9,
+        });
+
+        gsap.set([".yuri"], { xPercent: -50 });
+        gsap.set([".depay", ".hugo"], { xPercent: 0 });
+
+        // 2. TIMELINE DE SCROLL
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".hero",
+            start: "top top",
+            end: "bottom top",
+            scrub: 1,
+            invalidateOnRefresh: true,
+            onLeave: () => {
+              setShowMenuBtn(true);
+              setIsMenuOpen(true);
+            },
+            onEnterBack: () => {
+              setShowMenuBtn(false);
+              setIsMenuOpen(true);
+              gsap.to(".banner", { opacity: 1, x: 0, duration: 0.3 });
+            },
+          },
+        });
+
+        // FIX DO ESCUDO: Usamos pixels fixos no top para o header
+        // Isso impede que ele "desça" em telas menores
+        tl.to(
+          shield,
+          {
+            bottom: "auto",
+            top: "-270px", // Posição segura no topo
+            scale: 0.2,
+            duration: 1,
+            ease: "power2.inOut",
+          },
+          0,
+        );
+
+        tl.to("#displacementMap", { attr: { scale: 0 }, duration: 1 }, 0);
+
+        // Links voando para o header (calc de top fixo para evitar bug de altura)
+        banners.forEach((banner, i) => {
+          tl.to(
+            banner,
+            {
+              top: (isMobile ? 20 : 40) + i * 55 + "px",
+              left: "calc(100% - 40px)", // Garante que fique colado na direita
+              xPercent: -100, // Força o alinhamento pela ponta direita do botão
+              scale: 0.75,
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            0,
+          );
+        });
+
+        players.forEach((p) => {
+          tl.to(p, { opacity: 0, y: -100, scale: 0.8, duration: 0.5 }, 0);
+        });
+
+        return () => tl.kill(); // Cleanup
       },
-      0,
     );
-
-    // Anima os Links
-    banners.forEach((banner, i) => {
-      tl.to(
-        banner,
-        {
-          top: 40 + i * 60 + "px",
-          left: "calc(100% - 40px)",
-          xPercent: -100,
-          scale: 0.75,
-          duration: 1,
-          ease: "power2.inOut",
-        },
-        0,
-      );
-    });
-
-    players.forEach((p) => {
-      tl.to(p, { opacity: 0, y: -150, scale: 0.8, duration: 0.5 }, 0);
-    });
 
     const handleMove = (e: MouseEvent) => {
       if (window.scrollY > 200) return;
-      const x = (e.clientX / window.innerWidth - 0.5) * 40;
-      const y = (e.clientY / window.innerHeight - 0.5) * 40;
+      const x = (e.clientX / window.innerWidth - 0.5) * 30;
+      const y = (e.clientY / window.innerHeight - 0.5) * 30;
 
       banners.forEach((b, i) =>
         gsap.to(b, {
@@ -237,8 +258,7 @@ const Hero = ({ setShowMenuBtn, setIsMenuOpen }: HeroProps) => {
     window.addEventListener("mousemove", handleMove);
     return () => {
       window.removeEventListener("mousemove", handleMove);
-      tl.kill();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      mm.revert(); // Reverte as alterações do matchMedia
     };
   }, [setIsMenuOpen, setShowMenuBtn]);
 
@@ -272,7 +292,6 @@ const Hero = ({ setShowMenuBtn, setIsMenuOpen }: HeroProps) => {
         >
           <BackgroundCanvas />
         </Canvas>
-
         <div className="overlay absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.8)_90%)]" />
       </div>
     </section>

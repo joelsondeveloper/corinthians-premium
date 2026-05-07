@@ -25,12 +25,8 @@ body {
 
 /* ESCUDO - POSIÇÃO INICIAL DEFINIDA NO CSS */
 .shield {
-  position: absolute;
-  bottom: 0%;
-  left: 50%;
-  width: 35%; /* ou o tamanho que você preferir */
+  left: 50%; /* ou o tamanho que você preferir */
   z-index: 1000;
-  pointer-events: none;
   will-change: transform, top, bottom, scale;
 }
 
@@ -74,4 +70,19 @@ body {
 .banner:hover {
   background: white;
   color: black;
+}
+
+/* Adicione no seu arquivo global ou tailwind */
+.font-impact {
+  font-family: 'Impact', 'Anton', sans-serif;
+}
+
+.glory-item {
+  /* Garante que o texto não "vaze" nas bordas */
+  will-change: transform, opacity;
+}
+
+/* Efeito de brilho sutil na imagem quando ativa o hover */
+.group:hover .glory-media-container {
+  box-shadow: 0 0 50px rgba(255, 94, 0, 0.2);
 }
