@@ -1,6 +1,5 @@
-import { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
-import useReducedMotion from "../hooks/useReducedMotion";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -11,52 +10,49 @@ const moments = [
     title: "A ETERNIDADE DE BASÍLIO",
     description:
       "Vinte e três anos de silêncio transformados no grito mais ensurdecedor da história. O gol que libertou uma nação.",
-    img: "/basilio.webp",
+    img: "/basilio.png",
   },
   {
     year: "1982",
     title: "DEMOCRACIA CORINTIANA",
     description:
       "Mais que futebol, uma revolução. Sócrates e o punho cerrado provaram que o Corinthians é o povo no poder.",
-    img: "/democracia.webp",
+    img: "/democracia.png",
   },
   {
     year: "2000",
     title: "DONOS DO PLANETA",
     description:
       "O mundo conheceu o Bando de Loucos no Maracanã. Derrubamos gigantes para cravar a bandeira no topo do mundo.",
-    img: "/donos.webp",
+    img: "/donos.png",
   },
   {
     year: "2012",
     title: "A LIBERTAÇÃO",
     description:
       "A América se curvou à invencibilidade fiel. O brilho de Sheik no Pacaembu transformou o continente em preto e branco.",
-    img: "/libertacao.webp",
+    img: "/libertação.png",
   },
   {
     year: "2012",
     title: "O JAPÃO FOI INVADIDO",
     description:
       "Trinta mil loucos cruzaram o globo. Cássio gigante, Guerrero rei, e o mundo, pela segunda vez, foi nosso.",
-    img: "/campeao.webp",
+    img: "/campeão.png",
   },
 ];
 
 const GloryMoments = () => {
-  const reducedMotion = useReducedMotion();
   const sectionRef = useRef(null);
   const ballRef = useRef(null);
   const footRef = useRef(null);
 
   useLayoutEffect(() => {
-    if (reducedMotion) return;
     const ctx = gsap.context(() => {
       // 1. TIMELINE PRINCIPAL (Pinning e Scroll)
       const mainTl = gsap.timeline({
         scrollTrigger: {
-          id: "glory",
-            trigger: sectionRef.current,
+          trigger: sectionRef.current,
           start: "top top",
           end: "+=1200%", // Aumentado para um voo mais longo e épico
           scrub: 1.5, // Scrub um pouco mais suave para a bola não tremer
@@ -176,22 +172,17 @@ const GloryMoments = () => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [reducedMotion]);
+  }, []);
 
   return (
     <section
-      id="glory"
-      tabIndex={-1}
-      aria-label="Momentos de glória"
       ref={sectionRef}
-      className="glory-section relative h-screen w-full bg-black overflow-hidden perspective-[1500px]"
+      className="relative h-screen w-full bg-black overflow-hidden perspective-[1500px]"
     >
       {/* Background Campo (Fundo Estático) */}
       <div className="absolute inset-0 z-0 opacity-20">
         <img
-          src="/campo.webp"
-          loading="lazy"
-          decoding="async"
+          src="/campo.png"
           className="w-full h-full object-cover grayscale brightness-50"
           alt="Arena"
         />
@@ -211,24 +202,24 @@ const GloryMoments = () => {
       </div>
 
       {/* Container das Histórias (Layout Lateral) */}
-      <div className="glory-cards absolute inset-0 flex items-center justify-center z-10">
+      <div className="absolute inset-0 flex items-center justify-center z-10">
         {moments.map((m, i) => (
           <div
             key={i}
-            className={`glory-card glory-card-${i} absolute w-full h-full flex flex-col md:flex-row items-center justify-center px-5 md:px-32 gap-4 md:gap-10 opacity-0 pointer-events-none`}
+            className={`glory-card-${i} absolute w-full h-full flex flex-col md:flex-row items-center justify-center px-10 md:px-32 gap-10 opacity-0 pointer-events-none`}
           >
             {/* Lado Esquerdo: Texto imponente */}
             <div className="w-full md:w-1/2 text-left space-y-4">
               <span
-                className="text-orange-600 font-black text-4xl md:text-9xl block leading-none italic"
+                className="text-orange-600 font-black text-6xl md:text-9xl block leading-none italic"
                 style={{ fontFamily: "Impact, sans-serif" }}
               >
                 {m.year}
               </span>
-              <h3 className="text-white text-2xl md:text-5xl font-black uppercase tracking-tighter border-l-4 border-orange-600 pl-4">
+              <h3 className="text-white text-3xl md:text-5xl font-black uppercase tracking-tighter border-l-4 border-orange-600 pl-4">
                 {m.title}
               </h3>
-              <p className="text-zinc-400 text-base md:text-2xl max-w-xl leading-relaxed font-light">
+              <p className="text-zinc-400 text-lg md:text-2xl max-w-xl leading-relaxed font-light">
                 {m.description}
               </p>
             </div>
@@ -238,10 +229,6 @@ const GloryMoments = () => {
               <div className="relative overflow-hidden border-2 border-white/10 rounded-sm shadow-2xl">
                 <img
                   src={m.img}
-                  loading="lazy"
-                  decoding="async"
-                  width={1600}
-                  height={900}
                   className="w-full aspect-video object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700"
                   alt={m.title}
                 />
@@ -255,7 +242,7 @@ const GloryMoments = () => {
       {/* O Pé (Chute inicial) */}
       <img
         ref={footRef}
-        src="/chuteira.webp"
+        src="/chuteira.png"
         className="absolute left-[-40%] md:left-[-5%] top-[55%] w-72 z-50 pointer-events-none opacity-0"
         alt="O Chute"
       />
@@ -263,7 +250,7 @@ const GloryMoments = () => {
       {/* A BOLA (Sempre visível navegando no túnel) */}
       <img
         ref={ballRef}
-        src="/bola.webp"
+        src="/bola.png"
         className="absolute z-40 w-24 md:w-32 drop-shadow-[0_0_40px_rgba(255,94,0,0.6)]"
         alt="Bola do Jogo"
       />

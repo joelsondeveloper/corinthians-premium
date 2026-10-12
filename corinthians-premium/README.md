@@ -1,41 +1,73 @@
-# Corinthians Premium
+# React + TypeScript + Vite
 
-Experiência visual sobre o Corinthians com React, TypeScript, Vite, GSAP e Three.js.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Executar
+Currently, two official plugins are available:
 
-Use Node.js 22.14 ou superior. A partir desta pasta:
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-```sh
-npm ci
-npm run dev
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-## Validar antes de publicar
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```sh
-npm run lint
-npm test
-npm run build
-npm run preview
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
-Verifique também navegação por teclado, menu em tela pequena, rolagem e a preferência
-de movimento reduzido do sistema. O teste de partículas cobre a posição do mouse
-exatamente sobre um confete e o retorno das partículas aos limites da tela.
-
-## Publicação
-
-O projeto existente da Vercel acompanha a branch `main` do repositório
-`joelsondeveloper/corinthians-premium`. Root Directory: `corinthians-premium`;
-comando de build: `npm run build`; pasta de saída: `dist`.
-Após o envio, confirme que o deployment está Ready e corresponde ao novo commit.
-
-## Desempenho e acessibilidade
-
-- A interface e o conteúdo carregam separados do módulo WebGL.
-- Imagens WebP otimizadas são servidas; os PNGs originais permanecem como fontes.
-- O vídeo/WebGL pausa com a aba oculta e ao chegar à seção histórica.
-- Confetes só são atualizados enquanto sua seção está visível.
-- Movimento reduzido oferece conteúdo estático e dispensa WebGL e confetes.
-- O menu inclui somente as seções implementadas e funciona por teclado.

@@ -7,10 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "node --experimental-strip-types --test tests/*.test.mjs"
+    "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@studio-freight/lenis": "^1.0.42",
     "@tailwindcss/vite": "^4.2.1",

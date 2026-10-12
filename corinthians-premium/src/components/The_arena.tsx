@@ -3,13 +3,11 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import StatHand from "./StatHand";
 import ConfettiPhysics from "./ConfettiPhysics";
-import useReducedMotion from "../hooks/useReducedMotion";
 import DecorationHand from "./DecorationHand";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const The_arena = () => {
-  const reducedMotion = useReducedMotion();
   const sectionRef = useRef(null);
   const textRef = useRef(null);
 
@@ -42,13 +40,11 @@ const The_arena = () => {
   ];
 
  useLayoutEffect(() => {
-    if (reducedMotion) return;
     const ctx = gsap.context(() => {
       // 1. TIMELINE DE SCROLL (Controla apenas a SUBIDA e DESCIDA)
       const tl = gsap.timeline({
         scrollTrigger: {
-          id: "arena",
-            trigger: sectionRef.current,
+          trigger: sectionRef.current,
           start: "top top",
           end: "+=350%",
           scrub: 1,
@@ -85,16 +81,16 @@ const The_arena = () => {
         });
       };
 
-      if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mousemove", handleMouseMove);
       return () => window.removeEventListener("mousemove", handleMouseMove);
 
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [reducedMotion]);
+  }, []);
 
   return (
-    <section id="arena" tabIndex={-1} aria-label="A Fiel Torcida" ref={sectionRef} className="relative h-screen w-full z-40 bg-transparent overflow-hidden">
+    <section ref={sectionRef} className="relative h-screen w-full z-40 bg-transparent overflow-hidden">
       
       {/* 1. MÁSCARA TEXTO (z-40) */}
       <div className="absolute inset-0 h-screen w-full pointer-events-none z-40">
@@ -113,7 +109,7 @@ const The_arena = () => {
       </div>
 
       {/* 2. CONFETES (z-45) */}
-      {!reducedMotion && <ConfettiPhysics />}
+      <ConfettiPhysics />
 
        <div className="absolute bottom-0 left-0 w-full h-full pointer-events-none overflow-hidden">
         {easterEggs.map((egg, i) => (
@@ -122,11 +118,11 @@ const The_arena = () => {
       </div>
 
       {/* 4. MÃOS PRINCIPAIS (Stats) (z-50 - Na frente de tudo) */}
-      <div className="absolute bottom-0 left-0 w-full px-4 md:px-10 grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 items-end pointer-events-none z-50 h-full overflow-hidden stats-grid">
-        {stats.map((stat) => (
+      <div className="absolute bottom-0 left-0 w-full px-4 md:px-10 grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 items-end pointer-events-none z-50 h-full overflow-hidden">
+        {stats.map((stat, i) => (
           <div 
             key={stat.index} 
-            className="stat-hand-wrapper w-full h-full flex items-end"
+            className={`stat-hand-wrapper w-full h-full flex items-end ${i > 1 ? "hidden md:flex" : "flex"}`}
           >
             <StatHand {...stat} />
           </div>
