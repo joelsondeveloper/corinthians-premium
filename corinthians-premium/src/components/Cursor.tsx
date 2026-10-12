@@ -1,11 +1,16 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import useReducedMotion from "../hooks/useReducedMotion";
 
 const Cursor = () => {
 
+  const reducedMotion = useReducedMotion();
   const isHovering = useRef(false);
 
   useEffect(() => {
+    if (reducedMotion) return;
+    const media = gsap.matchMedia();
+    media.add("(hover: hover) and (pointer: fine)", () => {
     const dotX = gsap.quickTo(".cursor-dot", "x", {
       duration: 0.1,
       ease: "power3",
@@ -95,16 +100,22 @@ const Cursor = () => {
     return () => {
       window.removeEventListener("mousemove", moveCursor);
       pulse.kill();
+      gsap.killTweensOf([".cursor-dot", ".cursor-logo"]);
     };
-  }, []);
+    });
+    return () => media.revert();
+  }, [reducedMotion]);
+
+  if (reducedMotion) return null;
 
   return (
     <>
       <div className="cursor-dot fixed w-2 h-2 bg-white rounded-full pointer-events-none z-9999 -translate-x-1/2 -translate-y-1/2" />
 
       <img
-        src="/cursor.png"
-        alt="Cursor Corinthians"
+        src="/cursor.webp"
+        alt=""
+        aria-hidden="true"
         className="cursor-logo fixed w-10 pointer-events-none z-9998 -translate-x-1/2"
       />
     </>

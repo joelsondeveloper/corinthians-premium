@@ -1,11 +1,5 @@
 @import "tailwindcss";
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  cursor: none;
-}
 
 body {
   background-color: black;
@@ -85,4 +79,30 @@ body {
 /* Efeito de brilho sutil na imagem quando ativa o hover */
 .group:hover .glory-media-container {
   box-shadow: 0 0 50px rgba(255, 94, 0, 0.2);
+}
+/* Keep native pointer and keyboard navigation on devices without a fine pointer. */
+.cursor-dot, .cursor-logo { display: none; }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  *, a, button { cursor: none; }
+  .cursor-dot, .cursor-logo { display: block; }
+}
+:focus-visible { outline: 3px solid #ff5e00; outline-offset: 5px; }
+.skip-link { position: fixed; top: 1rem; left: 1rem; z-index: 10000; padding: 1rem; background: white; color: black; transform: translateY(-200%); }
+.skip-link:focus { transform: none; }
+@media (max-width: 767px) {
+  .stats-grid { height: 65vh; grid-template-rows: repeat(2, minmax(0, 1fr)); align-content: end; }
+  .glory-card { max-height: 100svh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .hero-stage { display: none; }
+  .shield { width: 72px; left: 20px; top: 20px; }
+  .banner { top: 24px; right: 20px; left: auto; font-size: 12px; padding: 8px 12px; filter: none !important; }
+  .banner + .banner { top: 72px; }
+  #arena { background: #141414; }
+  #arena > div:first-child { display: none; }
+  .glory-section { height: auto; overflow: visible; }
+  .glory-cards { position: relative; display: block; }
+  .glory-card { position: relative; opacity: 1; height: auto; min-height: 80svh; max-height: none; padding-top: 7rem; padding-bottom: 3rem; pointer-events: auto; }
+  .glory-section > img, .goal-flash { display: none; }
 }
